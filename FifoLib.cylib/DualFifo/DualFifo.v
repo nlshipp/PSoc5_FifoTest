@@ -16,7 +16,11 @@
 /* ==================== Include Component Definitions ==================== */
 
 module DualFifo (
-    input wire clock
+    input wire clock,
+    output wire f0Empty,
+    output wire f1Empty,
+    output wire f0NotFull,
+    output wire f1NotFull
 );
 
 /* ==================== Wire and Register Declarations ==================== */
@@ -83,10 +87,10 @@ cy_psoc3_dp8 #(
         .co_msb(  ), 
         .cmsb(  ), 
         .so(  ), 
-        .f0_bus_stat(  ), 
-        .f0_blk_stat(  ), 
-        .f1_bus_stat(  ), 
-        .f1_blk_stat(  )
+        .f0_bus_stat( f0NotFull ), 
+        .f0_blk_stat( f0Empty ), 
+        .f1_bus_stat( f1NotFull ), 
+        .f1_blk_stat( f1Empty )
     );
 
 endmodule

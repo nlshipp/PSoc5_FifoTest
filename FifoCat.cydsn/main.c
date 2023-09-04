@@ -17,6 +17,7 @@ char buffer[1024];
 uint8 f0, f1;
 uint16 f01;
 uint8 concat = 0;
+uint8 status;
 
 int main(void)
 {
@@ -30,6 +31,10 @@ int main(void)
         UART_PutStringConst("Clearing FIFOs\n\r");
         DualFifo_DP_F0_CLEAR;
         DualFifo_DP_F1_CLEAR;
+        
+        status = Status_Read();
+        sprintf(buffer, "Status=%02x\n\r", status);
+        UART_PutString(buffer);
         
         if (concat & 0x01)
             UART_PutStringConst("Filling fifos using 16 bit word\n\r");
@@ -49,6 +54,9 @@ int main(void)
                 DualFifo_DP_F0_REG = i;
                 DualFifo_DP_F1_REG = 0x10 + i;
             }
+            status = Status_Read();
+            sprintf(buffer, "Word %d Status=%02x\n\r", i, status);
+            UART_PutString(buffer);
         }
         
         UART_PutStringConst("Printing FIFOs\n\r");
@@ -67,6 +75,9 @@ int main(void)
             
             sprintf(buffer, "F0=%02x F1=%02x\n\r", f01 & 0xFF, f01 >> 8);
             UART_PutString(buffer);
+            status = Status_Read();
+            sprintf(buffer, "Word %d Status=%02x\n\r", i, status);
+            UART_PutString(buffer);
         }
         
         UART_PutStringConst("Filling FIFOs\n\r");
@@ -81,6 +92,9 @@ int main(void)
                 DualFifo_DP_F0_REG = 0x20 + i;
                 DualFifo_DP_F1_REG = 0x30 + i;
             }
+            status = Status_Read();
+            sprintf(buffer, "Word %d Status=%02x\n\r", i, status);
+            UART_PutString(buffer);
         }
         
         UART_PutStringConst("Printing FIFOs\n\r");
@@ -98,6 +112,9 @@ int main(void)
             }
             
             sprintf(buffer, "F0=%02x F1=%02x\n\r", f01 & 0xFF, f01 >> 8);
+            UART_PutString(buffer);
+            status = Status_Read();
+            sprintf(buffer, "Word %d Status=%02x\n\r", i, status);
             UART_PutString(buffer);
         }
         
